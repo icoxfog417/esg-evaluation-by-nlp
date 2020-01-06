@@ -105,7 +105,7 @@ class PDFReader():
         df = pd.DataFrame(items)
         return df
 
-    def preprocess_frame(self, df):
+    def preprocess_frame(self, df, lower=True):
         prefixes = []
         suffixes = []
         preprocessed = []
@@ -113,6 +113,8 @@ class PDFReader():
 
         for i, row in df.iterrows():
             content = self.normalize(row["content"])
+            if lower:
+                content = content.lower()
             if len(content) < magic_number:
                 continue
             else:

@@ -10,7 +10,7 @@ class TestPDFReader(unittest.TestCase):
     def tearDownClass(cls):
         PDFReader.stop()
 
-    def xtest_read_pdf_text(self):
+    def test_read_pdf_text(self):
         path = os.path.join(os.path.dirname(__file__), "../_data")
         storage = Storage(path)
         url = "https://global.toyota/pages/global_toyota/ir/library/annual/2019_001_annual_jp.pdf"
