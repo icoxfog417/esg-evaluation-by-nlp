@@ -57,6 +57,7 @@ class PDFReader():
         pages = self.read_pages(path, html=True)
         page_index = 0
         for i, p in enumerate(pages):
+            p = p.replace("<br>", "\n").replace("<br/>", "\n")
             html = BeautifulSoup(p, "html.parser")
             if not html:
                 continue
@@ -91,17 +92,14 @@ class PDFReader():
     def preprocess_frame(self, df, lower=True):
         repeat_check = []
         preprocessed = []
-        magic_number = 30
 
         for i, row in df.iterrows():
             content = self.normalize(row["content"])
             if lower:
                 content = content.lower()
-            if len(content) < magic_number:
-                if content in repeat_check:
-                    continue
-                else:
-                    repeat_check.append(magic_number)
+            if content in repeat_check:
+                continue
+            repeat_check.append(content)
 
             item = {}
             for c in df.columns:

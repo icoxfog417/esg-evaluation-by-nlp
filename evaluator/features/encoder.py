@@ -19,7 +19,10 @@ def encode(pretrained_model_name, text, batch_size=10):
         vector = nlp(text)
         vector = np.array(vector)
         # get [CLS] tokens (added by add_special_tokens)
-        features = np.squeeze(vector[:, 0, :])
+        # [CLS] tokens does not suitable for sentence representation?
+        # https://huggingface.co/transformers/model_doc/bert.html
+        # features = np.squeeze(vector[:, 0, :])
+        features = np.mean(vector, axis=1)
     else:
         features = []
         indexes = [i for i, s in
@@ -29,7 +32,8 @@ def encode(pretrained_model_name, text, batch_size=10):
             batch = _text[i:i + batch_size]
             vector = nlp(batch)
             vector = np.array(vector)
-            feature = np.squeeze(vector[:, 0, :])
+            # feature = np.squeeze(vector[:, 0, :])
+            feature = np.mean(vector, axis=1)
             features.append(feature)
 
         features = np.vstack(features)
@@ -40,11 +44,11 @@ def encode(pretrained_model_name, text, batch_size=10):
 
 if __name__ == "__main__":
     feature = encode("bert-base-japanese-whole-word-masking",
-                    ["私は歌手です。",
-                    "明日は晴れだと思うので、外に行きたい。",
-                    "おいしそうなリンゴを買ってきた。",
-                    "スーパーでリンゴを買ってきた。",
-                    "焼き肉は石川さんが詳しい。"], batch_size=2)
+                    ["スーパーでリンゴを買ってきた。",
+                     "明日は晴れだと思うので、スーパーに行きたい。",
+                     "おいしそうなリンゴを買ってきた。",
+                     "私は歌手です。",
+                     "焼き肉は石川さんが詳しい。"], batch_size=2)
 
     print(feature.shape)
     print(np.max(feature, axis=1))
