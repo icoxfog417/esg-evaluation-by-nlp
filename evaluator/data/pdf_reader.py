@@ -8,7 +8,6 @@ from pdfminer.layout import LAParams
 from tqdm import tqdm
 from bs4 import BeautifulSoup
 import pandas as pd
-from evaluator.models.document import Document
 
 
 class PDFReader():
@@ -112,20 +111,3 @@ class PDFReader():
 
         df = pd.DataFrame(preprocessed)
         return df
-
-    def read_as_documents(self, path, company_id, fiscal_year, lang="ja"):
-        frame = self.read_to_frame(path)
-        frame = self.preprocess_frame(frame, lower=False)
-        documents = []
-        for index, row in frame.iterrows():
-            d = Document(
-                document_id=index,
-                resource_id=index,
-                company_id=company_id,
-                fiscal_year=fiscal_year,
-                body=row["content"],
-                lang=lang
-            )
-            documents.append(d)
-        
-        return documents

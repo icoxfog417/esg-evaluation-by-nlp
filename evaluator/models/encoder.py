@@ -30,10 +30,8 @@ def encode(pretrained_model_name, text, batch_size=10):
         _text = sorted(text, key=lambda s: len(s))
         for i in tqdm(range(0, len(_text), batch_size)):
             batch = _text[i:i + batch_size]
-            vector = nlp(batch)
-            vector = np.array(vector)
-            # feature = np.squeeze(vector[:, 0, :])
-            feature = np.mean(vector, axis=1)
+            vector = nlp(batch, add_special_tokens=False)
+            feature = np.array([np.mean(v[0], axis=0) for v in vector])
             features.append(feature)
 
         features = np.vstack(features)
@@ -43,7 +41,7 @@ def encode(pretrained_model_name, text, batch_size=10):
 
 
 if __name__ == "__main__":
-    feature = encode("bert-base-japanese-whole-word-masking",
+    feature = encode("cl-tohoku/bert-base-japanese-whole-word-masking",
                     ["スーパーでリンゴを買ってきた。",
                      "明日は晴れだと思うので、スーパーに行きたい。",
                      "おいしそうなリンゴを買ってきた。",
