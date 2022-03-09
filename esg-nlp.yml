@@ -134,4 +134,3 @@ dependencies:
     - typer==0.4.0
     - unidic-lite==1.0.8
     - wasabi==0.9.0
-prefix: /home/studio-lab-user/.conda/envs/esg-nlp
