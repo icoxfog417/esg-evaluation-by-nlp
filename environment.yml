@@ -18,4 +18,6 @@ dependencies:
   - transformers
   - pytorch
   - spacy
-  - spacy-model-en_core_web_sm
+  - pip
+  - pip:
+    - -r requirements.txt
